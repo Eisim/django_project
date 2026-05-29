@@ -20,6 +20,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     views_count = models.IntegerField(default=0)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts', default=1)
 
     def __str__(self):
         return self.title
