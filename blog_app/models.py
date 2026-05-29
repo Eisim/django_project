@@ -6,6 +6,9 @@ class Category(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
@@ -17,3 +20,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     views_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.title
+
+    def increase_views_count(self):
+        self.views_count += 1
+        self.save()
