@@ -15,3 +15,5 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('published', 'created_at')
     search_fields = ('title', 'content')
     prepopulated_fields = {'slug': ('title',)}
+    #exclude = ('slug', ) # TODO: посмотреть почему падает с ошибкой
+    #readonly_fields = ('slug', )
