@@ -1,0 +1,17 @@
+[
+{
+  "model": "blog_app.post",
+  "pk": 3,
+  "fields": {
+    "title": "Первая статья",
+    "slug": "pervaya-statya",
+    "content": "первый текст",
+    "author": 1,
+    "published": false,
+    "created_at": "2026-05-30T08:10:52.185Z",
+    "updated_at": "2026-05-30T08:10:52.185Z",
+    "views_count": 0,
+    "category": 1
+  }
+}
+]
