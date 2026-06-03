@@ -11,10 +11,10 @@ migrate:
 createsuperuser:
 	uv run manage.py createsuperuser
 #fixture commands
-save_fixture:
+save_post_fixture:
 	$env:PYTHONUTF8 = "1"
 	uv run manage.py dumpdata blog_app.Post --indent 2 --output fixtures/posts.json
-load_fixture:
+load_post_fixture:
 	uv run manage.py loaddata fixtures/posts.json
 #custom commands
 print_posts:
@@ -25,5 +25,5 @@ create_post:
 	uv run manage.py create_post --author "${author}" --content "${content}" --title "${title}"
 delete_post:
 	uv run manage.py delete_post --post_id "${post_id}"
-update_post:
+update_post_title:
 	uv run manage.py update_post --post_id "${post_id}" --title "${title}"

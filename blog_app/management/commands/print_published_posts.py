@@ -10,6 +10,7 @@ class Command(BaseCommand):
         posts = Post.objects.filter(published=True)
         if not posts.exists():
             self.stdout.write(self.style.WARNING("No published posts found"))
+            return
 
         for post in posts:
             self.stdout.write(f"{post.id}: {post.title} - {post.created_at:%Y-%m-%d}")
