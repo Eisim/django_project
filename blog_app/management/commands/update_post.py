@@ -10,14 +10,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         post_id = options['post_id']
-        post: Post | None = None
         try:
             post = Post.objects.get(id=post_id)
         except Post.DoesNotExist:
             self.stdout.write(self.style.WARNING("Post not found"))
-        except Exception:
-            self.stdout.write(self.style.ERROR("Unexpected error"))
-        if not post:
             return
         post.title = options['title']
         post.save()

@@ -25,5 +25,5 @@ create_post:
 	uv run manage.py create_post --author "${author}" --content "${content}" --title "${title}"
 delete_post:
 	uv run manage.py delete_post --post_id "${post_id}"
-update_post_title:
+update_post:
 	uv run manage.py update_post --post_id "${post_id}" --title "${title}"
