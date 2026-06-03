@@ -6,10 +6,145 @@
     "title": "Первая статья",
     "slug": "pervaya-statya",
     "content": "первый текст",
-    "author": 1,
+    "author": 2,
     "published": false,
     "created_at": "2026-05-30T08:10:52.185Z",
     "updated_at": "2026-05-30T08:10:52.185Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 4,
+  "fields": {
+    "title": "Два часа ночи",
+    "slug": "dva-chasa-nochi",
+    "content": "Отличное время для домашки",
+    "author": 2,
+    "published": true,
+    "created_at": "2026-06-02T23:17:51.970Z",
+    "updated_at": "2026-06-02T23:18:07.710Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 5,
+  "fields": {
+    "title": "Время домашки",
+    "slug": "vremya-domashki",
+    "content": "Два часа ночи",
+    "author": 2,
+    "published": false,
+    "created_at": "2026-06-02T23:18:36.069Z",
+    "updated_at": "2026-06-02T23:18:36.069Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 6,
+  "fields": {
+    "title": "РЗТ",
+    "slug": "rzt",
+    "content": "Смотрю рзт и делаю домашку",
+    "author": 2,
+    "published": false,
+    "created_at": "2026-06-02T23:18:57.985Z",
+    "updated_at": "2026-06-02T23:18:57.985Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 7,
+  "fields": {
+    "title": "1Заголовок начинающийся с цифры",
+    "slug": "1zagolovok-nachinayushijsya-s-cifry",
+    "content": "Первый заголовок, начинающийся с цифры",
+    "author": 2,
+    "published": false,
+    "created_at": "2026-06-02T23:19:46.306Z",
+    "updated_at": "2026-06-02T23:19:46.306Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 8,
+  "fields": {
+    "title": "Еще 4 статьи",
+    "slug": "eshe-4-stati",
+    "content": "Сидел работал. Теперь домашку делаю",
+    "author": 2,
+    "published": true,
+    "created_at": "2026-06-02T23:20:17.403Z",
+    "updated_at": "2026-06-02T23:20:17.403Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 9,
+  "fields": {
+    "title": "Клавиатура",
+    "slug": "klaviatura",
+    "content": "До сих пор не могу привыкнуть к механике",
+    "author": 2,
+    "published": true,
+    "created_at": "2026-06-02T23:20:48.011Z",
+    "updated_at": "2026-06-02T23:20:48.011Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 10,
+  "fields": {
+    "title": "Монитор",
+    "slug": "monitor",
+    "content": "Вот монитор на 27 дюймов конечно хорош",
+    "author": 2,
+    "published": false,
+    "created_at": "2026-06-02T23:22:06.048Z",
+    "updated_at": "2026-06-02T23:22:06.048Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 11,
+  "fields": {
+    "title": "Cnfnmz",
+    "slug": "cnfnmz",
+    "content": "Nen z cgtwbfkmyj gthtgenfk hfcrkflre)",
+    "author": 2,
+    "published": false,
+    "created_at": "2026-06-02T23:22:44.255Z",
+    "updated_at": "2026-06-02T23:22:44.255Z",
+    "views_count": 0,
+    "category": 1
+  }
+},
+{
+  "model": "blog_app.post",
+  "pk": 12,
+  "fields": {
+    "title": "10чка",
+    "slug": "10chka",
+    "content": "Последняя статья. Теперь надо сохранить",
+    "author": 2,
+    "published": true,
+    "created_at": "2026-06-02T23:23:11.077Z",
+    "updated_at": "2026-06-02T23:23:11.077Z",
     "views_count": 0,
     "category": 1
   }
