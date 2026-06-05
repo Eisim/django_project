@@ -7,7 +7,7 @@ def index(request):
 
 
 def __http_post_response(post:Post) -> str:
-    return f'<li>{post.created_at}) <a href=\"/posts/{post.id}/\">{post.title}</a> | {post.author}</li>'
+    return f'<li>{post.created_at}) <a href=\"/posts/{post.slug}/\">{post.title}</a> | {post.author}</li>'
 
 
 def __http_category_response(category: Category) -> str:
@@ -23,8 +23,8 @@ def posts_list(request):
     return HttpResponse(http_response)
 
 
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+def post_detail(request, post_slug):
+    post = get_object_or_404(Post, slug=post_slug)
     response_header = f"<h1>{post.title}</h1>"
     post_author = f"by: {post.author}"
     post_content = f"{post.content}"
