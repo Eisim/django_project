@@ -39,18 +39,19 @@ def post_detail(request, post_slug):
 
 def categories_list(request):
     categories = Category.objects.all()
-    response_header = "<h1>Categories</h1>"
-    category_list = f"<ul>{''.join([__http_category_response(category) for category in categories])}</ul>"
-    http_response = f"{response_header}\n{category_list}"
-    return HttpResponse(http_response)
+    context = {
+        'categories': categories
+    }
+    return render(request, 'categories_list.html', context)
 
 
 def category_detail(request, category_id):
     category = get_object_or_404(Category, id=category_id)
-    response_header = f"<h1>{category.title}</h1>"
     posts = Post.objects.filter(category=category, published=True)
 
-    post_list = f"<ul>{''.join([__http_post_response(post) for post in posts])}</ul>"
+    context = {
+        'category': category,
+        'posts': posts,
+    }
 
-    http_response = f"{response_header}\n{post_list}"
-    return HttpResponse(http_response)
+    return render(request, 'category_detail.html', context)
