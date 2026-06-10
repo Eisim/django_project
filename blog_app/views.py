@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from .models import Post, Category
 from django.shortcuts import get_object_or_404, render
 
@@ -21,16 +20,17 @@ def __http_category_response(category: Category) -> str:
 
 def posts_list(request):
     posts = Post.objects.filter(published=True)
-    response_header = "<h1>Published posts</h1>"
-    post_list = f"<ul>{''.join([__http_post_response(post) for post in posts])}</ul>"
-    http_response = f"{response_header}\n{post_list}"
 
-    return HttpResponse(http_response)
+    context = {
+        'posts': posts,
+    }
+
+    return render(request, 'posts_list.html', context)
 
 
 def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
-
+    post.increase_views_count()
     context = {
         'post': post
     }

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Публикации - {{ block.super }} {% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4 fw-bold text-dark">Каталог публикаций</h1>
+            <p class="text-muted mb-4">Выберите интересующую вас публикацию, чтобы прочитать её.</p>
+
+            <div class="list-group shadow-sm">
+                {% for post in posts %}
+                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3 fs-5 position-relative">
+                        <a href="{% url 'blog:post_detail' post.slug %}"
+                           class="text-decoration-none text-reset stretched-link flex-grow-1">
+                            📁 <strong>{{ post.title }}</strong>
+                        </a>
+
+                        <a href="{% url 'blog:category_detail' post.category.id %}"
+                           class="badge bg-primary rounded-pill text-decoration-none"
+                           style="position: relative; z-index: 2;">
+                            {{ post.category }}
+                        </a>
+                    </div>
+                {% empty %}
+                    <div class="alert alert-info mb-0">Посты еще не созданы.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
