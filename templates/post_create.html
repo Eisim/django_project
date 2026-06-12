@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Создание новой статьи — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-4">📝 Новая статья</h2>
+
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <!-- Вывод общих ошибок формы (например, non_field_errors) -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Поле: Заголовок -->
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label fw-semibold">
+                            {{ form.title.label }}
+                        </label>
+                        <input type="text"
+                               name="{{ form.title.name }}"
+                               id="{{ form.title.id_for_label }}"
+                               value="{{ form.title.value|default:'' }}"
+                               class="form-control {% if form.title.errors %}is-invalid{% endif %}"
+                               placeholder="Введите заголовок статьи">
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted small">Заголовок должен быть не короче 5 символов.</div>
+                    </div>
+
+                    <!-- Поле: Содержание -->
+                    <div class="mb-3">
+                        <label for="{{ form.content.id_for_label }}" class="form-label fw-semibold">
+                            {{ form.content.label }}
+                        </label>
+                        <textarea name="{{ form.content.name }}"
+                                  id="{{ form.content.id_for_label }}"
+                                  rows="10"
+                                  class="form-control {% if form.content.errors %}is-invalid{% endif %}"
+                                  placeholder="Текст вашей статьи...">{{ form.content.value|default:'' }}</textarea>
+                        {% if form.content.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Поле: Автор -->
+                    <div class="mb-3">
+                        <label for="{{ form.author.id_for_label }}" class="form-label fw-semibold">
+                            {{ form.author.label }}
+                        </label>
+                        <select name="{{ form.author.name }}"
+                                id="{{ form.author.id_for_label }}"
+                                class="form-select {% if form.author.errors %}is-invalid{% endif %}">
+                            {% for choice_value, choice_label in form.author.field.choices %}
+                                <option value="{{ choice_value }}"
+                                        {% if form.author.value == choice_value %}selected{% endif %}>
+                                    {{ choice_label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.author.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.author.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Поле: Категория -->
+                    <div class="mb-4">
+                        <label for="{{ form.category.id_for_label }}" class="form-label fw-semibold">
+                            {{ form.category.label }}
+                        </label>
+                        <select name="{{ form.category.name }}"
+                                id="{{ form.category.id_for_label }}"
+                                class="form-select {% if form.category.errors %}is-invalid{% endif %}">
+                            <option value="" {% if not form.category.value %}selected{% endif %}>---------</option>
+                            {% for choice_value, choice_label in form.category.field.choices %}
+                                {% if choice_value %}
+                                    <option value="{{ choice_value }}"
+                                            {% if form.category.value|stringformat:"s" == choice_value|stringformat:"s" %}selected{% endif %}>
+                                        {{ choice_label }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        {% if form.category.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.category.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted small">Выберите категорию (необязательно).</div>
+                    </div>
+
+                    <!-- Кнопки отправки и отмены -->
+                    <div class="d-flex gap-3 align-items-center">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                            ✨ Опубликовать
+                        </button>
+                        <a href="{% url 'blog:posts_list' %}" class="btn btn-outline-secondary px-4 py-2">
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Небольшой блок с подсказкой -->
+        <div class="alert alert-light border shadow-sm mt-4" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            🔍 После создания статьи вы сможете редактировать её на странице детального просмотра.
+        </div>
+    </div>
+</div>
+{% endblock %}

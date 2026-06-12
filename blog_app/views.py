@@ -1,11 +1,21 @@
+from .forms import PostForm, SearchForm
 from .models import Post, Category
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+
+from slugify import slugify
 
 
 def index(request):
+    search_form = SearchForm(data=request.GET)
     posts = Post.objects.filter(published=True)
+
+    if search_form.is_valid():
+        query = search_form.cleaned_data.get('query')
+        posts = posts.filter(title__icontains=query)
+
     context = {
-        'posts': posts[:5]
+        'posts': posts[:5],
+        'search_form': search_form,
     }
     return render(request, 'index.html', context)
 
@@ -55,3 +65,19 @@ def category_detail(request, category_id):
     }
 
     return render(request, 'category_detail.html', context)
+
+
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.slug = slugify(post.title)
+            post.save()
+            return redirect(r'blog:post_detail', post_slug=post.slug)
+    else:
+        form = PostForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'post_create.html', context)
