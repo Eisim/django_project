@@ -1,5 +1,7 @@
 from django import forms
-from blog_app.models import Post
+from slugify import slugify
+
+from blog_app.models import Post, Category
 
 
 class PostForm(forms.ModelForm):
@@ -35,3 +37,20 @@ class SearchForm(forms.Form):
                             widget=forms.TextInput(
                                 attrs={'class': 'form-control', 'placeholder': 'Введите текст для поиска'}),
                             )
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['title']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        categories = Category.objects.filter(slug=slugify(title))
+
+        if categories.exists():
+            raise forms.ValidationError("Такая категория уже существует")
+        return title

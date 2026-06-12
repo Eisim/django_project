@@ -1,4 +1,4 @@
-from .forms import PostForm, SearchForm
+from .forms import PostForm, SearchForm, CategoryForm
 from .models import Post, Category
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -73,3 +73,20 @@ def post_create(request):
         'form': form,
     }
     return render(request, 'post_create.html', context)
+
+
+def category_create(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.slug = slugify(category.title)
+            category.save()
+            return redirect(r'blog:category_detail', category_id=category.id)
+    else:
+        form = CategoryForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'category_create.html', context)
