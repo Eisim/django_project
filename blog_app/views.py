@@ -20,14 +20,6 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def __http_post_response(post: Post) -> str:
-    return f'<li>{post.created_at}) <a href=\"/posts/{post.slug}/\">{post.title}</a> | {post.author}</li>'
-
-
-def __http_category_response(category: Category) -> str:
-    return f'<li><a href="/categories/{category.id}">{category.title}</a></li>'
-
-
 def posts_list(request):
     posts = Post.objects.filter(published=True)
 
