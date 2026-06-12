@@ -34,7 +34,8 @@ def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
     post.increase_views_count()
     context = {
-        'post': post
+        'post': post,
+        'is_author': request.user.is_authenticated and request.user == post.author,
     }
     return render(request, 'post_detail.html', context)
 
@@ -90,3 +91,15 @@ def category_create(request):
         'form': form,
     }
     return render(request, 'category_create.html', context)
+
+
+def post_edit(request, post_slug):
+    post = get_object_or_404(Post, slug=post_slug)
+    form = PostForm(request.POST or None, instance=post)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect(r'blog:post_detail', post_slug=post.slug)
+    context = {
+        'form':form,
+    }
+    return render(request, 'post_edit.html', context=context)
