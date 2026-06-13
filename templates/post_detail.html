@@ -43,7 +43,7 @@
                     {% endif %}
 
                     {# Кнопка редактирования – видна только автору #}
-                    {% if is_author %}
+                    {% if user == post.author %}
                         <a href="{% url 'blog:post_edit' post.slug %}" class="btn btn-outline-warning">
                             ✏️ Редактировать статью
                         </a>

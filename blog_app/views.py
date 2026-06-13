@@ -35,7 +35,6 @@ def post_detail(request, post_slug):
     post.increase_views_count()
     context = {
         'post': post,
-        'is_author': request.user.is_authenticated and request.user == post.author,
     }
     return render(request, 'post_detail.html', context)
 
