@@ -1,4 +1,4 @@
-from .forms import PostForm, SearchForm
+from .forms import PostForm, SearchForm, CategoryForm
 from .models import Post, Category
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -20,14 +20,6 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def __http_post_response(post: Post) -> str:
-    return f'<li>{post.created_at}) <a href=\"/posts/{post.slug}/\">{post.title}</a> | {post.author}</li>'
-
-
-def __http_category_response(category: Category) -> str:
-    return f'<li><a href="/categories/{category.id}">{category.title}</a></li>'
-
-
 def posts_list(request):
     posts = Post.objects.filter(published=True)
 
@@ -42,7 +34,7 @@ def post_detail(request, post_slug):
     post = get_object_or_404(Post, slug=post_slug)
     post.increase_views_count()
     context = {
-        'post': post
+        'post': post,
     }
     return render(request, 'post_detail.html', context)
 
@@ -81,3 +73,32 @@ def post_create(request):
         'form': form,
     }
     return render(request, 'post_create.html', context)
+
+
+def category_create(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.slug = slugify(category.title)
+            category.save()
+            return redirect(r'blog:category_detail', category_id=category.id)
+    else:
+        form = CategoryForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'category_create.html', context)
+
+
+def post_edit(request, post_slug):
+    post = get_object_or_404(Post, slug=post_slug)
+    form = PostForm(request.POST or None, instance=post)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect(r'blog:post_detail', post_slug=post.slug)
+    context = {
+        'form':form,
+    }
+    return render(request, 'post_edit.html', context=context)
