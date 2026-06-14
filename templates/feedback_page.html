@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Обратная связь - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-4">📬 Обратная связь</h2>
+                <p class="text-secondary mb-4">
+                    Заполните форму ниже, чтобы отправить нам сообщение. Мы постараемся ответить вам в ближайшее время.
+                </p>
+
+                <!-- Сообщение об успешной отправке (если есть) -->
+                {% if success %}
+                    <div class="alert alert-success border-0 shadow-sm" role="alert">
+                        ✅ Ваше сообщение успешно отправлено! Спасибо за обратную связь.
+                    </div>
+                {% endif %}
+
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <!-- Вывод общих ошибок формы (non_field_errors) -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Поле "Имя" -->
+                    <div class="mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted small">Как к вам обращаться?</div>
+                    </div>
+
+                    <!-- Поле "Email" -->
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted small">Укажите действующий email для ответа.</div>
+                    </div>
+
+                    <!-- Поле "Сообщение" -->
+                    <div class="mb-4">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.message.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted small">Опишите ваш вопрос или предложение подробно.</div>
+                    </div>
+
+                    <!-- Кнопки отправки и отмены -->
+                    <div class="d-flex gap-3 align-items-center">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                            ✉️ Отправить сообщение
+                        </button>
+                        <a href="{% url 'blog:index' %}" class="btn btn-outline-secondary px-4 py-2">
+                            На главную
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Дополнительная информация -->
+        <div class="alert alert-light border shadow-sm mt-4" role="alert">
+            📌 Вы также можете написать нам на почту <strong>support@devblog.ru</strong> или позвонить по телефону <strong>+7 (123) 456-78-90</strong>.
+        </div>
+    </div>
+</div>
+{% endblock %}
