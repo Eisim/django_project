@@ -11,7 +11,8 @@ def feedback_view(request):
             name = form.cleaned_data.get('name')
             email = form.cleaned_data.get('email')
             message = form.cleaned_data.get('message')
-            Feedback.objects.create(name=name, email=email, message=message)
+            subject = form.cleaned_data.get('subject')
+            Feedback.objects.create(name=name, email=email, message=message, subject=subject)
             return redirect('feedback:success')
     else:
         form = FeedbackForm()
