@@ -11,10 +11,15 @@ def feedback_view(request):
             name = form.cleaned_data.get('name')
             email = form.cleaned_data.get('email')
             message = form.cleaned_data.get('message')
-            Feedback.objects.create(name=name, email=email, message=message)
-            return redirect('blog:index')
+            subject = form.cleaned_data.get('subject')
+            Feedback.objects.create(name=name, email=email, message=message, subject=subject)
+            return redirect('feedback:success')
     else:
         form = FeedbackForm()
 
     context = {'form': form}
     return render(request, 'feedback_page.html', context)
+
+
+def feedback_success(request):
+    return render(request, 'success.html')
