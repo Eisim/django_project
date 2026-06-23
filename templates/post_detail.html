@@ -3,55 +3,65 @@
 {% block title %}{{ post.title }} — {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <article class="bg-white p-5 rounded border shadow-sm">
-            <!-- Ссылка на возврат назад -->
-            <a href="{% url 'blog:posts_list' %}" class="text-decoration-none text-muted small">&larr; Вернуться к списку статей</a>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <article class="bg-white p-5 rounded border shadow-sm">
+                <!-- Ссылка на возврат назад -->
+                <a href="{% url 'blog:posts_list' %}" class="text-decoration-none text-muted small">&larr; Вернуться к
+                    списку статей</a>
 
-            <header class="mt-3 mb-4">
-                <!-- Категория -->
-                {% if post.category %}
-                    <span class="badge bg-secondary text-uppercase mb-2">{{ post.category.title }}</span>
-                {% endif %}
+                <header class="mt-3 mb-4">
+                    <!-- Категория -->
+                    {% if post.category %}
+                        <span class="badge bg-secondary text-uppercase mb-2">{{ post.category.title }}</span>
+                    {% endif %}
 
-                <!-- Заголовок с кнопкой редактирования (для автора) -->
-                <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
-                    <h1 class="display-4 fw-bold text-dark mb-0">{{ post.title }}</h1>
-                    {% if user == post.author %}
-                        <a href="{% url 'blog:post_edit' post.slug %}" class="btn btn-outline-warning btn-sm flex-shrink-0">
-                            ✏️ Редактировать статью
+                    <!-- Заголовок с кнопкой редактирования (для автора) -->
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+                        <h1 class="display-4 fw-bold text-dark mb-0">{{ post.title }}</h1>
+                        {% if user == post.author %}
+                            <a href="{% url 'blog:post_edit' post.slug %}"
+                               class="btn btn-outline-warning btn-sm flex-shrink-0">
+                                ✏️ Редактировать статью
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Метаданные публикации -->
+                    <div class="text-muted mt-3 d-flex flex-wrap gap-3">
+                        <span>📅 Опубликовано: <strong>{{ post.created_at|date:"d E Y в H:i" }}</strong></span>
+                        <span>✍️ Автор: <strong>{{ post.author }}</strong></span>
+                        <span>👁️ Просмотров: <strong>{{ post.views_count|default:"0" }}</strong></span>
+                    </div>
+                </header>
+
+                <hr class="my-4">
+
+                <!-- Содержимое статьи -->
+                <div class="post-content text-dark fs-5 lh-lg mb-5">
+                    {{ post.content|linebreaksbr }}
+                </div>
+
+                <!-- Панель управления -->
+                <div class="bg-light p-4 rounded border d-flex flex-wrap align-items-center gap-3">
+                    {% if post.category %}
+                        <a href="{% url 'blog:category_detail' post.category.id %}" class="btn btn-outline-primary">
+                            Все из категории «{{ post.category.title }}»
                         </a>
                     {% endif %}
-                </div>
-
-                <!-- Метаданные публикации -->
-                <div class="text-muted mt-3 d-flex flex-wrap gap-3">
-                    <span>📅 Опубликовано: <strong>{{ post.created_at|date:"d E Y в H:i" }}</strong></span>
-                    <span>✍️ Автор: <strong>{{ post.author }}</strong></span>
-                    <span>👁️ Просмотров: <strong>{{ post.views_count|default:"0" }}</strong></span>
-                </div>
-            </header>
-
-            <hr class="my-4">
-
-            <!-- Содержимое статьи -->
-            <div class="post-content text-dark fs-5 lh-lg mb-5">
-                {{ post.content|linebreaksbr }}
-            </div>
-
-            <!-- Панель управления (две кнопки) -->
-            <div class="bg-light p-4 rounded border d-flex flex-wrap justify-content-center justify-content-md-between align-items-center gap-3">
-                {% if post.category %}
-                    <a href="{% url 'blog:category_detail' post.category.id %}" class="btn btn-outline-primary">
-                        Все из категории «{{ post.category.title }}»
+                    <a href="{% url 'blog:posts_list' %}" class="btn btn-dark">
+                        Все статьи
                     </a>
-                {% endif %}
-                <a href="{% url 'blog:posts_list' %}" class="btn btn-dark">
-                    Все статьи
-                </a>
-            </div>
-        </article>
+
+                    {# Кнопка удаления — доступна только автору, прижата вправо #}
+                    {% if user == post.author %}
+                            {% csrf_token %}
+                            <a class="btn btn-danger" href="{% url 'blog:post_delete' post.slug%}">
+                                🗑️ Удалить статью
+                            </a>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
     </div>
-</div>
 {% endblock %}
