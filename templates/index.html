@@ -58,6 +58,8 @@
                 Статьи ещё не опубликованы.
             </div>
         {% endfor %}
+            {% include 'includes/pagination.html' %}
+
     </div>
 
     <!-- Правая колонка: Сайдбар с информацией -->
@@ -73,8 +75,8 @@
                     <button class="btn btn-dark" type="submit">Найти</button>
                 </form>
             </div>
-        </div>
 
+        </div>
         <!-- Карточка "О проекте" (остаётся без изменений) -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-4">

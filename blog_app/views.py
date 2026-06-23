@@ -1,23 +1,56 @@
-from .forms import PostForm, SearchForm, CategoryForm
+from .forms import PostForm, CategoryForm
 from .models import Post, Category
 from django.shortcuts import get_object_or_404, render, redirect
 
 from slugify import slugify
 
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 
-def index(request):
-    search_form = SearchForm(data=request.GET)
-    posts = Post.objects.filter(published=True)
 
-    if search_form.is_valid():
-        query = search_form.cleaned_data.get('query')
-        posts = posts.filter(title__icontains=query)
+class PostListView(ListView):
+    model = Post
+    template_name = 'index.html'
+    context_object_name = 'posts'
+    paginate_by = 5
 
-    context = {
-        'posts': posts[:5],
-        'search_form': search_form,
-    }
-    return render(request, 'index.html', context)
+    def get_queryset(self):
+        queryset = Post.objects.filter(published=True)
+        return queryset.order_by('-created_at')
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+    context_object_name = 'post'
+    slug_url_kwarg = 'post_slug'
+
+
+class PostFormBase:
+    model = Post
+    form_class = PostForm
+
+
+class PostCreateView(PostFormBase, CreateView):
+    template_name = 'post_create.html'
+    success_url = reverse_lazy('blog:index')
+
+    def form_valid(self, form):
+        form.instance.slug = slugify(form.instance.title)
+        return super().form_valid(form)
+
+
+class PostUpdateView(PostFormBase, UpdateView):
+    template_name = 'post_edit.html'
+    success_url = reverse_lazy('blog:index')
+    slug_url_kwarg = 'post_slug'
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'post_confirm_delete.html'
+    success_url = reverse_lazy('blog:index')
+    slug_url_kwarg = 'post_slug'
 
 
 def posts_list(request):
@@ -28,15 +61,6 @@ def posts_list(request):
     }
 
     return render(request, 'posts_list.html', context)
-
-
-def post_detail(request, post_slug):
-    post = get_object_or_404(Post, slug=post_slug)
-    post.increase_views_count()
-    context = {
-        'post': post,
-    }
-    return render(request, 'post_detail.html', context)
 
 
 def categories_list(request):
@@ -59,22 +83,6 @@ def category_detail(request, category_id):
     return render(request, 'category_detail.html', context)
 
 
-def post_create(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.slug = slugify(post.title)
-            post.save()
-            return redirect(r'blog:post_detail', post_slug=post.slug)
-    else:
-        form = PostForm()
-    context = {
-        'form': form,
-    }
-    return render(request, 'post_create.html', context)
-
-
 def category_create(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -90,15 +98,3 @@ def category_create(request):
         'form': form,
     }
     return render(request, 'category_create.html', context)
-
-
-def post_edit(request, post_slug):
-    post = get_object_or_404(Post, slug=post_slug)
-    form = PostForm(request.POST or None, instance=post)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect(r'blog:post_detail', post_slug=post.slug)
-    context = {
-        'form':form,
-    }
-    return render(request, 'post_edit.html', context=context)
