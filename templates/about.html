@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}О проекте — {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <h1 class="display-4 fw-bold mb-3">📖 О проекте</h1>
+        <p class="lead text-muted mb-4">
+            Узнайте, для чего создан этот блог, какие технологии задействованы и кто стоит за разработкой.
+        </p>
+        <hr class="mb-4">
+
+        <!-- Карточка: Цель -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h4 fw-bold d-flex align-items-center gap-2">
+                    <span class="text-primary">🎯</span> Цель проекта
+                </h2>
+                <p class="text-secondary mb-0">
+                    Этот блог разработан в рамках учебного курса по Django для закрепления навыков
+                    создания веб-приложений. Основные задачи — распитие чая, работа с моделями, представлениями,
+                    шаблонами, формами, а также практика отклонения от дедлайнов и использования менеджера зависимостей UV
+                    и фреймворка Bootstrap.
+                </p>
+            </div>
+        </div>
+
+        <!-- Карточка: Технологический стек -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h4 fw-bold d-flex align-items-center gap-2">
+                    <span class="text-primary">⚙️</span> Технологический стек
+                </h2>
+                <ul class="list-unstyled d-flex flex-wrap gap-3 mt-3">
+                    <li><span class="badge bg-primary p-2">Django 5</span> — основной фреймворк</li>
+                    <li><span class="badge bg-secondary p-2">UV</span> — менеджер зависимостей</li>
+                    <li><span class="badge bg-info text-dark p-2">Bootstrap 5</span> — стилизация и адаптивность</li>
+                    <li><span class="badge bg-dark p-2">SQLite</span> — база данных (по умолчанию)</li>
+                </ul>
+                <p class="text-muted small mt-2">Все инструменты выбраны для удобства обучения и быстрой разработки.</p>
+            </div>
+        </div>
+
+        <!-- Карточка: Об авторе -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="h4 fw-bold d-flex align-items-center gap-2">
+                    <span class="text-primary">👨‍💻</span> Об авторе
+                </h2>
+                <p class="text-secondary mb-0">
+                    Проект выполнен безликим студентом в рамках практического курса по Django. Все материалы
+                    носят исключительно уморительный характер и не предназначены для коммерческого использования.
+                    Кот открыт для изучения и поглаживания.
+                </p>
+            </div>
+        </div>
+
+        <!-- Кнопка возврата -->
+        <div class="mt-4">
+            <a href="{% url 'blog:index' %}" class="btn btn-dark px-4 py-2">
+                ← На главную
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

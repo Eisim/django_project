@@ -32,6 +32,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog:categories_list' %}">Категории</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary border border-primary rounded-pill d-inline-flex align-items-center gap-2"
+                           href="{% url 'blog:post_create' %}"
+                           style="padding: 7px 16px;">
+                            ➕ пост
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -48,6 +56,12 @@
     <div class="container text-center">
         <p class="mb-1">&copy; 2026 Учебный Django-проект.</p>
         <small class="text-muted">Сделано с любовью на курсе по Django</small>
+        <!-- Центрированный список навигации -->
+        <ul class="navbar-nav d-flex justify-content-center mt-2">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'blog:about' %}">О проекте</a>
+            </li>
+        </ul>
     </div>
 </footer>
 
