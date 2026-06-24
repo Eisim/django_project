@@ -1,4 +1,6 @@
 from django.urls import path
+from django.views.generic import TemplateView
+
 from . import views
 
 urlpatterns = [
@@ -12,5 +14,6 @@ urlpatterns = [
     path('categories/', views.CategoryListView.as_view(), name='categories_list'),
     path('categories/create/', views.CategoryCreateView.as_view(), name='category_create'),
     path('categories/<int:category_id>/', views.CategoryDetailView.as_view(), name='category_detail'),
+    path('about/', TemplateView.as_view(template_name='about.html'), name='about')
 ]
 app_name = 'blog'

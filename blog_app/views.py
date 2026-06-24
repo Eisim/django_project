@@ -25,6 +25,12 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
 
+    def get_object(self, queryset=None):
+        object: Post = super().get_object(queryset)
+        object.views_count += 1
+        object.save()
+        return object
+
 
 class PostFormBase:
     model = Post
