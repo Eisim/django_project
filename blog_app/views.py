@@ -7,12 +7,21 @@ from slugify import slugify
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
+from blog_app.mixins import TitleMixin, StuffRequiredMixin
 
-class PostListView(ListView):
+
+class IndexView(TitleMixin, ListView):
     model = Post
     template_name = 'index.html'
     context_object_name = 'posts'
     paginate_by = 5
+    title = 'Главная страница'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['last_posts'] = Post.objects.filter(published=True).select_related('category', 'author')[:5]
+        context['categories'] = Category.objects.all()
+        return context
 
     def get_queryset(self):
         queryset = Post.objects.filter(published=True)
@@ -25,9 +34,12 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
     slug_url_kwarg = 'post_slug'
 
+    def get_queryset(self, *args, **kwargs):
+        return Post.objects.select_related('category', 'author')
+
     def get_object(self, queryset=None):
         object: Post = super().get_object(queryset)
-        object.views_count += 1
+        object.increase_views_count()
         object.save()
         return object
 
@@ -37,43 +49,48 @@ class PostFormBase:
     form_class = PostForm
 
 
-class PostCreateView(PostFormBase, CreateView):
+class PostCreateView(StuffRequiredMixin, TitleMixin, PostFormBase, CreateView):
     template_name = 'post_create.html'
     success_url = reverse_lazy('blog:index')
+    title = 'Создание новой статьи'
 
     def form_valid(self, form):
         form.instance.slug = slugify(form.instance.title)
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 
-class PostUpdateView(PostFormBase, UpdateView):
+class PostUpdateView(StuffRequiredMixin, TitleMixin, PostFormBase, UpdateView):
     template_name = 'post_edit.html'
     success_url = reverse_lazy('blog:index')
     slug_url_kwarg = 'post_slug'
+    title = 'Редактирование статьи'
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(StuffRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_confirm_delete.html'
     success_url = reverse_lazy('blog:index')
     slug_url_kwarg = 'post_slug'
 
 
-class PostListPageView(ListView):
+class PostListPageView(TitleMixin, ListView):
     model = Post
     template_name = 'posts_list.html'
     paginate_by = 5
     context_object_name = 'posts'
+    title = 'Список статей'
 
     def get_queryset(self):
         return Post.objects.filter(published=True).order_by('-created_at')
 
 
-class CategoryListView(ListView):
+class CategoryListView(TitleMixin, ListView):
     model = Category
     template_name = 'categories_list.html'
     paginate_by = 5
     context_object_name = 'categories'
+    title = 'Каталог категорий'
 
 
 class CategoryDetailView(DetailView):
@@ -105,6 +122,7 @@ class CategoryFormBase:
     form_class = CategoryForm
 
 
-class CategoryCreateView(CategoryFormBase, CreateView):
+class CategoryCreateView(CategoryFormBase, TitleMixin, CreateView):
     template_name = 'category_create.html'
     success_url = reverse_lazy('blog:index')
+    title = 'Создание категории'

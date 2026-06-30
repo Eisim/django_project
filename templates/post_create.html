@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Создание новой статьи — {{ block.super }}{% endblock %}
+{% block title %}{{ title }} — {{ block.super }}{% endblock %}
 
 {% block content %}
     <div class="row justify-content-center">
@@ -61,29 +61,29 @@
                             {% endif %}
                         </div>
 
-                        <!-- Поле: Автор -->
-                        <div class="mb-3">
-                            <label for="{{ form.author.id_for_label }}" class="form-label fw-semibold">
-                                {{ form.author.label }}
-                            </label>
-                            <select name="{{ form.author.name }}"
-                                    id="{{ form.author.id_for_label }}"
-                                    class="form-select {% if form.author.errors %}is-invalid{% endif %}">
-                                {% for choice_value, choice_label in form.author.field.choices %}
-                                    <option value="{{ choice_value }}"
-                                            {% if form.author.value == choice_value %}selected{% endif %}>
-                                        {{ choice_label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                            {% if form.author.errors %}
-                                <div class="invalid-feedback">
-                                    {% for error in form.author.errors %}
-                                        {{ error }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
+{#                        <!-- Поле: Автор -->#}
+{#                        <div class="mb-3">#}
+{#                            <label for="{{ form.author.id_for_label }}" class="form-label fw-semibold">#}
+{#                                {{ form.author.label }}#}
+{#                            </label>#}
+{#                            <select name="{{ form.author.name }}"#}
+{#                                    id="{{ form.author.id_for_label }}"#}
+{#                                    class="form-select {% if form.author.errors %}is-invalid{% endif %}">#}
+{#                                {% for choice_value, choice_label in form.author.field.choices %}#}
+{#                                    <option value="{{ choice_value }}"#}
+{#                                            {% if form.author.value == choice_value %}selected{% endif %}>#}
+{#                                        {{ choice_label }}#}
+{#                                    </option>#}
+{#                                {% endfor %}#}
+{#                            </select>#}
+{#                            {% if form.author.errors %}#}
+{#                                <div class="invalid-feedback">#}
+{#                                    {% for error in form.author.errors %}#}
+{#                                        {{ error }}#}
+{#                                    {% endfor %}#}
+{#                                </div>#}
+{#                            {% endif %}#}
+{#                        </div>#}
 
                         <!-- Поле: Категория -->
                         <div class="mb-4">

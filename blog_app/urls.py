@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
-    path('', views.PostListView.as_view(), name='index'),
+    path('', views.IndexView.as_view(), name='index'),
     path('posts/', views.PostListPageView.as_view(), name='posts_list'),
     path('posts/create/', views.PostCreateView.as_view(), name='post_create'),
     path('posts/<slug:post_slug>/edit', views.PostUpdateView.as_view(), name='post_edit'),
