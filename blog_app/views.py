@@ -40,7 +40,6 @@ class PostDetailView(DetailView):
     def get_object(self, queryset=None):
         object: Post = super().get_object(queryset)
         object.increase_views_count()
-        object.save()
         return object
 
 
