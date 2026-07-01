@@ -14,7 +14,7 @@ class ProfileDetailView(DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        profile, _ = Profile.objects.get_or_create(user__id=pk)
+        profile, _ = Profile.objects.get_or_create(user_id=pk)
         return profile
 
 
