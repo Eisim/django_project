@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль {{ profile.user.username }} — {{ block.super }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="bg-white p-5 rounded border shadow-sm">
+                <!-- Навигационная ссылка -->
+                <a href="{% url 'blog:posts_list' %}" class="text-decoration-none text-muted small">
+                    &larr; Вернуться к списку статей
+                </a>
+
+                <header class="mt-3 mb-4">
+                    <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+                        <h1 class="display-5 fw-bold text-dark mb-0">
+                            👤 {{ profile.user.username }}
+                        </h1>
+                        {% if user == profile.user %}
+                            <a href="{% url 'users:update' profile.user.id %}"
+                               class="btn btn-outline-warning btn-sm flex-shrink-0">
+                                ✏️ Редактировать профиль
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Метаданные -->
+                    <div class="text-muted mt-3 d-flex flex-wrap gap-3">
+                        <span>📅 Зарегистрирован: <strong>{{ profile.user.date_joined|date:"d E Y" }}</strong></span>
+                        <span>📝 Постов: <strong>{{ profile.user.post_set.count|default:"0" }}</strong></span>
+                    </div>
+                </header>
+
+                <hr class="my-4">
+
+                <!-- Биография -->
+                <section class="mb-4">
+                    <h5 class="fw-semibold text-secondary">О себе</h5>
+                    <div class="text-dark fs-6 lh-lg">
+                        {% if profile.bio %}
+                            {{ profile.bio|linebreaksbr }}
+                        {% else %}
+                            <span class="text-muted fst-italic">Пользователь ещё не заполнил информацию о себе.</span>
+                        {% endif %}
+                    </div>
+                </section>
+
+                <!-- Социальная ссылка -->
+                {% if profile.social_link %}
+                    <section class="mb-4">
+                        <h5 class="fw-semibold text-secondary">Социальная сеть</h5>
+                        <a href="{{ profile.social_link }}" target="_blank"
+                           class="text-primary text-decoration-none">
+                            {{ profile.social_link }}
+                        </a>
+                    </section>
+                {% endif %}
+
+                <hr class="my-4">
+
+                <!-- Панель действий -->
+                <div class="bg-light p-4 rounded border d-flex flex-wrap align-items-center gap-3">
+                    <a href="{% url 'blog:posts_list' %}" class="btn btn-dark">
+                        Все статьи
+                    </a>
+                    {% if user == profile.user %}
+                        <a href="{% url 'blog:post_create' %}" class="btn btn-outline-primary">
+                            ➕ Создать пост
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
