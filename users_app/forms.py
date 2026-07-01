@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from users_app.models import Profile
 
@@ -16,3 +17,23 @@ class ProfileForm(forms.ModelForm):
             'bio': 'О Вас',
             'social_link': 'Контакт для связи'
         }
+
+
+class CustomLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update(
+                {'class': 'form-control',
+                 'placeholder': field.label}
+            )
+
+
+class CustomRegisterForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update(
+                {'class': 'form-control',
+                 'placeholder': field.label}
+            )

@@ -58,6 +58,9 @@
             <!-- Блок с ссылкой на регистрацию -->
             <div class="alert alert-light border shadow-sm mt-4" role="alert">
                 <i class="bi bi-info-circle-fill me-2"></i>
+                Забыли пароль? <a href="{% url 'users:password_reset' %}" class="alert-link">Сброс пароля</a>.
+                <br>
+                <i class="bi bi-info-circle-fill me-2"></i>
                 Нет аккаунта? <a href="{% url 'users:register' %}" class="alert-link">Зарегистрируйтесь</a>.
             </div>
         </div>

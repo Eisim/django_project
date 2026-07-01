@@ -1,9 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
 
-from users_app.forms import ProfileForm
+from users_app.forms import ProfileForm, CustomLoginForm, CustomRegisterForm
 from users_app.mixins import AuthorRequiredMixin
 from users_app.models import Profile
 
@@ -32,8 +32,11 @@ class ProfileUpdateView(AuthorRequiredMixin, UpdateView):
         return profile
 
 
-
 class RegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = CustomRegisterForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('blog:index')
+
+
+class CustomLoginView(LoginView):
+    form_class = CustomLoginForm
