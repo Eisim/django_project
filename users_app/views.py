@@ -1,10 +1,12 @@
-from django.views.generic import DetailView, UpdateView
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, UpdateView, CreateView
 
-from users_app.models import Profile
 from users_app.forms import ProfileForm
 from users_app.mixins import AuthorRequiredMixin
+from users_app.models import Profile
+
 
 class ProfileDetailView(DetailView):
     model = Profile
@@ -12,7 +14,7 @@ class ProfileDetailView(DetailView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get('pk')
-        profile = get_object_or_404(Profile, user__id=pk)
+        profile, _ = Profile.objects.get_or_create(user__id=pk)
         return profile
 
 
@@ -28,3 +30,10 @@ class ProfileUpdateView(AuthorRequiredMixin, UpdateView):
         pk = self.kwargs.get('pk')
         profile = get_object_or_404(Profile, user__id=pk)
         return profile
+
+
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'users/register.html'
+    success_url = reverse_lazy('blog:index')
