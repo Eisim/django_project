@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from PIL import Image
 
 
 class Category(models.Model):
@@ -24,6 +25,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Время обновления")
 
+    image = models.ImageField(upload_to='posts/', blank=True, null=True, verbose_name='Обложка')
+
     views_count = models.IntegerField(default=0, verbose_name="Число просмотров")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts', default=1,
                                  verbose_name="Категория")
@@ -39,3 +42,13 @@ class Post(models.Model):
     def increase_views_count(self):
         self.views_count += 1
         self.save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.published = True
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 400 or img.width > 1000:
+                output_size = (400, 1000)
+                img.thumbnail(output_size)
+                img.save(self.image.path)

@@ -15,15 +15,26 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <!-- Логотип и имя пользователя (если авторизован) -->
+            <!-- Логотип и профиль пользователя -->
             <div class="d-flex align-items-center">
-                <a class="navbar-brand fw-bold" href="{% url 'blog:index' %}">
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'blog:index' %}">
                     🚀 DevBlog
                 </a>
                 {% if user.is_authenticated %}
-                    <span class="navbar-text text-light ms-2">|</span>
-                    <a class="navbar-brand" href="{% url 'users:details' user.id %}" style="font-size: 1.1rem;">
-                        👤 {{ user.username }}
+                    <span class="navbar-text text-light mx-2">|</span>
+                    <a href="{% url 'users:details' user.id %}"
+                       class="d-flex align-items-center text-light text-decoration-none"
+                       style="font-size: 1.1rem;">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}"
+                                 width="36" height="36" class="rounded-circle me-2">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
+                                 style="width: 36px; height: 36px; font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">
+                                {{ user.username|first }}
+                            </div>
+                        {% endif %}
+                        <span>{{ user.username }}</span>
                     </a>
                 {% endif %}
             </div>
@@ -33,7 +44,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Основные пункты меню сгруппированы в левой части -->
+                <!-- Основное меню -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog:index' %}">Главная</a>
@@ -72,22 +83,17 @@
 
                 <!-- Правая группа: создание поста + авторизация -->
                 <ul class="navbar-nav d-flex align-items-center">
-                    <!-- Кнопка создания поста (выделенная) -->
                     <li class="nav-item me-2">
                         <a class="nav-link btn btn-outline-primary rounded-pill px-3"
                            href="{% url 'blog:post_create' %}">
                             ➕ Пост
                         </a>
                     </li>
-
-                    <!-- Разделитель -->
                     <li class="nav-item">
                         <span class="navbar-text text-muted">|</span>
                     </li>
 
-                    <!-- Блок авторизации -->
                     {% if user.is_authenticated %}
-                        <!-- Выход (POST-форма) -->
                         <li class="nav-item">
                             <form method="post" action="{% url 'users:logout' %}" class="d-inline">
                                 {% csrf_token %}
@@ -99,7 +105,6 @@
                             </form>
                         </li>
                     {% else %}
-                        <!-- Вход и регистрация для гостей -->
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
                         </li>
@@ -115,7 +120,6 @@
 
 <main class="container my-5 flex-grow-1">
     {% block content %}
-
     {% endblock %}
 </main>
 
@@ -123,7 +127,6 @@
     <div class="container text-center">
         <p class="mb-1">&copy; 2026 Учебный Django-проект.</p>
         <small class="text-muted">Сделано с любовью на курсе по Django</small>
-        <!-- Центрированный список навигации -->
         <ul class="navbar-nav d-flex justify-content-center mt-2">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'blog:about' %}">О проекте</a>
@@ -133,6 +136,5 @@
 </footer>
 
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-
 </body>
 </html>

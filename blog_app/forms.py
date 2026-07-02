@@ -7,20 +7,24 @@ from blog_app.models import Post, Category
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content','category']# 'author', 'category']
+        fields = ['title', 'content', 'category', 'image']  # 'author', 'category']
 
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'content': forms.Textarea(attrs={'class': 'form-control'}),
-            #'author': forms.Select(attrs={'class': 'form-select'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название статьи'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Содержимое статьи'}),
+            # 'author': forms.Select(attrs={'class': 'form-select'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control'
+            })
         }
 
         labels = {
             'title': 'Заголовок статьи',
             'content': 'Содержание статьи',
-            #'author': 'Автор',
-            'category': 'категория'
+            # 'author': 'Автор',
+            'category': 'Категория',
+            'image': 'Обложка поста'
         }
 
     def clean_title(self):
@@ -29,6 +33,11 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("Заголовок должен быть длиннее 5 символов")
 
         return title
+    def save(self, *args, **kwargs):
+        instance = super().save(commit=False)
+        instance.published = True
+        instance.save()
+        return instance
 
 
 class SearchForm(forms.Form):
