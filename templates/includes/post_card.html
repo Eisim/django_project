@@ -1,0 +1,39 @@
+<article class="card mb-4 border-0 shadow-sm overflow-hidden"
+         {% if post.image %}style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{{ post.image.url }}') center/cover no-repeat; color: #fff;"{% endif %}>
+    <div class="card-body p-4">
+        <!-- Категория -->
+        {% if post.category %}
+            <a href="{% url 'blog:category_detail' post.category.id %}"
+               class="text-decoration-none fw-bold text-uppercase fs-6"
+               {% if post.image %}style="color: #ffc107;"{% else %}class="text-primary"{% endif %}>
+                {{ post.category.title }}
+            </a>
+        {% endif %}
+
+        <!-- Заголовок -->
+        <h3 class="card-title h2 mt-2 fw-bold">
+            <a href="{% url 'blog:post_detail' post.slug %}"
+               class="text-decoration-none {% if post.image %}text-white{% else %}text-dark{% endif %}">
+                {{ post.title }}
+            </a>
+        </h3>
+
+        <!-- Метаданные -->
+        <div class="{% if post.image %}text-light{% else %}text-muted{% endif %} small mb-3">
+            Опубликовано: {{ post.created_at|date:"d M Y в H:i" }} | Автор: {{ post.author }}
+        </div>
+
+        <!-- Анонс -->
+        <p class="card-text {% if post.image %}text-light{% else %}text-secondary{% endif %} fs-5">
+            {{ post.content|truncatewords:25 }}
+        </p>
+
+        <!-- Кнопка -->
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{% url 'blog:post_detail' post.slug %}"
+               class="btn {% if post.image %}btn-outline-light{% else %}btn-outline-dark{% endif %}">
+                Читать далее &rarr;
+            </a>
+        </div>
+    </div>
+</article>
