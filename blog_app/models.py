@@ -48,7 +48,7 @@ class Post(models.Model):
         self.published = True
         if self.image:
             img = Image.open(self.image.path)
-            if img.height > 400 or img.width > 1000:
-                output_size = (400, 1000)
+            if img.height > 1200 or img.width > 1200:
+                output_size = (1200, 1200)
                 img.thumbnail(output_size)
                 img.save(self.image.path)
