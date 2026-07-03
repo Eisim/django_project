@@ -7,16 +7,18 @@ from blog_app.models import Post, Category
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'category', 'image']  # 'author', 'category']
+        fields = ['title', 'content', 'category', 'published', 'image']  # 'author', 'category']
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название статьи'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Содержимое статьи'}),
             # 'author': forms.Select(attrs={'class': 'form-select'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
+            'published': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'image': forms.ClearableFileInput(attrs={
-                'class': 'form-control'
-            })
+                'class': 'form-control',
+            }),
+
         }
 
         labels = {
@@ -24,7 +26,8 @@ class PostForm(forms.ModelForm):
             'content': 'Содержание статьи',
             # 'author': 'Автор',
             'category': 'Категория',
-            'image': 'Обложка поста'
+            'image': 'Обложка поста',
+            'published': 'Опубликовать'
         }
 
     def clean_title(self):
@@ -33,11 +36,6 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("Заголовок должен быть длиннее 5 символов")
 
         return title
-    def save(self, *args, **kwargs):
-        instance = super().save(commit=False)
-        instance.published = True
-        instance.save()
-        return instance
 
 
 class SearchForm(forms.Form):

@@ -34,7 +34,7 @@ class Post(models.Model):
     class Meta:
         verbose_name: str = "Статья"
         verbose_name_plural: str = "Статьи"
-        ordering: list[str] = ["created_at"]
+        ordering: list[str] = ["-created_at"]
 
     def __str__(self):
         return self.title
@@ -45,7 +45,6 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.published = True
         if self.image:
             img = Image.open(self.image.path)
             if img.height > 1200 or img.width > 1200:
