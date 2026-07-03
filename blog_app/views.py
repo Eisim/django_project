@@ -19,7 +19,7 @@ class IndexView(TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['last_posts'] = Post.objects.filter(published=True).select_related('category', 'author')[:5]
+        context['last_posts'] = Post.objects.filter(published=True)[:5]
         context['categories'] = Category.objects.all()
         return context
 
@@ -40,7 +40,6 @@ class PostDetailView(DetailView):
     def get_object(self, queryset=None):
         object: Post = super().get_object(queryset)
         object.increase_views_count()
-        object.save()
         return object
 
 

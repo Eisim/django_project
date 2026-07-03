@@ -15,31 +15,103 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'blog:index' %}">
-                🚀 DevBlog
-            </a>
+            <!-- Логотип и профиль пользователя -->
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'blog:index' %}">
+                    🚀 DevBlog
+                </a>
+                {% if user.is_authenticated %}
+                    <span class="navbar-text text-light mx-2">|</span>
+                    <a href="{% url 'users:details' user.id %}"
+                       class="d-flex align-items-center text-light text-decoration-none"
+                       style="font-size: 1.1rem;">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}"
+                                 width="36" height="36" class="rounded-circle me-2">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2"
+                                 style="width: 36px; height: 36px; font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">
+                                {{ user.username|first }}
+                            </div>
+                        {% endif %}
+                        <span>{{ user.username }}</span>
+                    </a>
+                {% endif %}
+            </div>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <!-- Основное меню -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog:index' %}">Главная</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'blog:posts_list' %}">Статьи</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'blog:categories_list' %}">Категории</a>
+
+                    <!-- Выпадающий список категорий -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Категории
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                            {% for category in nav_categories %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'blog:category_detail' category.id %}">
+                                        {{ category.title }}
+                                    </a>
+                                </li>
+                            {% empty %}
+                                <li><span class="dropdown-item text-muted">Категории отсутствуют</span></li>
+                            {% endfor %}
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'blog:categories_list' %}">
+                                    Все категории
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-primary border border-primary rounded-pill d-inline-flex align-items-center gap-2"
-                           href="{% url 'blog:post_create' %}"
-                           style="padding: 7px 16px;">
-                            ➕ пост
+                </ul>
+
+                <!-- Правая группа: создание поста + авторизация -->
+                <ul class="navbar-nav d-flex align-items-center">
+                    <li class="nav-item me-2">
+                        <a class="nav-link btn btn-outline-primary rounded-pill px-3"
+                           href="{% url 'blog:post_create' %}">
+                            ➕ Пост
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <span class="navbar-text text-muted">|</span>
+                    </li>
 
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'users:logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-link btn btn-link"
+                                        style="display: inline; padding: 0.5rem 1rem; border: none; background: none;
+                                               color: rgba(255,255,255,.55); text-decoration: none; cursor: pointer;">
+                                    Выйти
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:register' %}">Регистрация</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -48,24 +120,30 @@
 
 <main class="container my-5 flex-grow-1">
     {% block content %}
-
     {% endblock %}
 </main>
 
 <footer class="bg-dark text-light py-4 mt-auto">
     <div class="container text-center">
         <p class="mb-1">&copy; 2026 Учебный Django-проект.</p>
-        <small class="text-muted">Сделано с любовью на курсе по Django</small>
-        <!-- Центрированный список навигации -->
-        <ul class="navbar-nav d-flex justify-content-center mt-2">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog:about' %}">О проекте</a>
-            </li>
-        </ul>
+        <small class="text-muted" style="color: #666666 !important; text-decoration: none !important;">Сделано с любовью на курсе по Django</small>
+
+        <!-- Статистика блога (белый цвет) -->
+        <p class="mt-2 mb-1 small" style="color: #ffffff !important;">
+            <span>📄 Всего статей: {{ total_posts|default:"0" }}</span>
+            <span class="mx-2">|</span>
+            <span>👥 Пользователей: {{ total_users|default:"0" }}</span>
+        </p>
+
+        <!-- Ссылка "О проекте" -->
+        <div class="mt-2">
+            <a href="{% url 'blog:about' %}" style="color: #ffffff !important; text-decoration: none !important;">
+                О проекте
+            </a>
+        </div>
     </div>
 </footer>
 
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

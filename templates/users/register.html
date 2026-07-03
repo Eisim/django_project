@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация — {{ block.super }}{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="fw-bold mb-4">📝 Регистрация</h2>
+
+                    <form method="post" action="">
+                        {% csrf_token %}
+
+                        <!-- Общие ошибки формы -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Поля формы -->
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in field.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted small">{{ field.help_text|safe }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <!-- Кнопки -->
+                        <div class="d-flex gap-3 align-items-center">
+                            <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">
+                                ✅ Зарегистрироваться
+                            </button>
+                            <a href="{% url 'blog:index' %}" class="btn btn-outline-secondary px-4 py-2">
+                                Отмена
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Блок с ссылкой на вход -->
+            <div class="alert alert-light border shadow-sm mt-4" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                Уже есть аккаунт? <a href="{% url 'users:login' %}" class="alert-link">Войдите</a>.
+            </div>
+        </div>
+    </div>
+{% endblock %}
