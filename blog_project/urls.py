@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('blog_app.urls', namespace='blog')),
     path('feedback/', include('feedback_app.urls', namespace='feedback')),
     path('users/', include('users_app.urls', namespace='users')),
-]
+    path('api/v1/', include('drf_app.urls', namespace='drf')),
+    ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
