@@ -14,6 +14,7 @@ class TestPostViewSet(TestCase):
 
         self.admin_user = User.objects.create_superuser(username='admin', email='', password='admin_password')
         self.base_user = User.objects.create_user(username='base', email='', password='base_password')
+        self.another_user = User.objects.create_user(username='another', email='', password='')
 
         self.category = Category.objects.create(title='category')
         self.post = Post.objects.create(
@@ -41,10 +42,42 @@ class TestPostViewSet(TestCase):
 
     def test_create_post_by_authenticated(self):
         data = {
-            'title': 'Anon Post Title',
-            'content': 'Anon Post Content',
+            'title': 'Base Post Title',
+            'content': 'Base Post Content',
             'category': self.category.pk,
         }
         self.client.force_authenticate(self.base_user)
         response = self.client.post(reverse('drf:post-list'), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_edit_post_by_anonymous(self):
+        data = {
+            "title": "Update Post Title"
+        }
+        self.client.force_authenticate(None)
+        response = self.client.patch(reverse('drf:post-detail', kwargs={'pk': self.post.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_edit_post_by_another_user(self):
+        data = {
+            "title": "Update Post Title"
+        }
+        self.client.force_authenticate(self.another_user)
+        response = self.client.patch(reverse('drf:post-detail', kwargs={'pk': self.post.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_edit_post_by_superuser(self):
+        data = {
+            "title": "Update Post Title"
+        }
+        self.client.force_authenticate(self.admin_user)
+        response = self.client.patch(reverse('drf:post-detail', kwargs={'pk': self.post.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_edit_post_by_author(self):
+        data = {
+            "title": "Update Post Title"
+        }
+        self.client.force_authenticate(self.base_user)
+        response = self.client.patch(reverse('drf:post-detail', kwargs={'pk': self.post.pk}), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
