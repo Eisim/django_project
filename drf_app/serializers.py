@@ -17,5 +17,5 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['title', 'slug', 'id', 'posts_count']
 
     def get_posts_count(self, obj) -> int:
-        post_count = Post.objects.filter(category=obj.id).count()
+        post_count = Post.objects.filter(category=obj.id, published=True).count()
         return post_count
