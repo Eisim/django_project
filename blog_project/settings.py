@@ -34,10 +34,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_filters',
+    'rest_framework',
+    'rest_framework_simplejwt',
+
     'blog_app',
     'feedback_app',
     'users_app',
-    'rest_framework',
     'drf_app',
 ]
 
@@ -128,3 +132,8 @@ LOGOUT_REDIRECT_URL = 'blog:index'
 LOGIN_URL = 'users:login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}

@@ -6,8 +6,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'slug', 'content', 'category', 'author', 'published', 'created_at']
-        read_only_fields = ['created_at']
-
+        read_only_fields = ['created_at', 'slug', 'author']
 
 class CategorySerializer(serializers.ModelSerializer):
     posts_count = serializers.SerializerMethodField()
