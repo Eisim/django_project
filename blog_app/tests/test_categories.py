@@ -19,7 +19,7 @@ class CategoryModelTest(TestCase):
         self.assertEqual(self.category.slug, 'base-category-object')
 
     def test_str_dunder_method(self):
-        self.assertEqual(self.category.__str__(), 'Base category object')
+        self.assertEqual(str(self.category), 'Base category object')
 
     def test_unique_slug_field(self):
         with self.assertRaises(IntegrityError):
